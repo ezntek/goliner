@@ -3,7 +3,6 @@ package game
 import (
 	"fmt"
 	"liner/dataio"
-
 	"github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -14,6 +13,21 @@ type Config struct {
 	ScreenWidth int32
 	ScreenHeight int32
 	Debug bool
+}
+
+func DrawCheckerboard(size int) {
+	var isGray bool
+	for y := -100; y < 1100; y += size {
+		for x := -300; x < 3000; x += size {
+			if isGray {
+				rl.DrawRectangle(int32(x),int32(y),int32(size), int32(size),dataio.Palette["verylightgray"])
+			} else {
+				rl.DrawRectangle(int32(x),int32(y),int32(size), int32(size),dataio.Palette["white"])
+			}
+			isGray = !isGray
+		} 
+		isGray = !isGray
+	}
 }
 
 func Game(conf Config) {
@@ -36,11 +50,13 @@ func Game(conf Config) {
 		rl.BeginDrawing()
 			rl.ClearBackground(rl.RayWhite)
 			camera.Target = rl.Vector2{X: player.Rect.X + player.Rect.Width/2, Y: player.Rect.Y + player.Rect.Height/2}
-			rl.DrawText(fmt.Sprintf("X: %0.1f Y: %0.1f", player.Rect.X, player.Rect.Y), 20, 20, 20, rl.Gold)
 			rl.BeginMode2D(camera)
-				rl.DrawRectangle(30,200,100,150,dataio.Palette["brickred"])
+				DrawCheckerboard(15)
 				player.Draw()
 			rl.EndMode2D()
+			rl.DrawText(fmt.Sprintf("version %s, build %d", conf.Version, conf.Build), 20, conf.ScreenHeight - 30, 20, rl.Gold)
+			rl.DrawText(fmt.Sprintf("X: %0.1f Y: %0.1f", player.Rect.X, player.Rect.Y), 20, 20, 15, rl.Gray)
+			rl.DrawText(fmt.Sprintf("X Velocity: %0.2f Y Velocity: %0.2f", player.Velocity.X, player.Velocity.Y), 20, 35, 15, rl.Gray)
 		rl.EndDrawing()
 	}
 }
