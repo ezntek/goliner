@@ -1,6 +1,7 @@
 package game
 
 import (
+	"fmt"
 	"liner/dataio"
 
 	"github.com/gen2brain/raylib-go/raylib"
@@ -16,7 +17,6 @@ type Config struct {
 }
 
 func Game(conf Config) {
-	var state string = "game"
 	rl.InitWindow(conf.ScreenWidth, conf.ScreenHeight, "wow goliner")
 	rl.SetTargetFPS(conf.FPS)
 
@@ -32,15 +32,15 @@ func Game(conf Config) {
 	camera.Rotation = 0.0
 
 	for !rl.WindowShouldClose() {
-		if state == "game" {
-			player.Update()
-			rl.BeginDrawing()
-				camera.Target = rl.Vector2{X: player.Rect.X + player.Rect.Width/2, Y: player.Rect.Y + player.Rect.Height/2}
-				rl.BeginMode2D(camera)
-					rl.DrawRectangle(30,200,100,150,dataio.Palette["brickred"])
-					player.Draw()
-				rl.EndMode2D()
-			rl.EndDrawing()
-		}
+		player.Update(conf.FPS)
+		rl.BeginDrawing()
+			rl.ClearBackground(rl.RayWhite)
+			camera.Target = rl.Vector2{X: player.Rect.X + player.Rect.Width/2, Y: player.Rect.Y + player.Rect.Height/2}
+			rl.DrawText(fmt.Sprintf("X: %0.1f Y: %0.1f", player.Rect.X, player.Rect.Y), 20, 20, 20, rl.Gold)
+			rl.BeginMode2D(camera)
+				rl.DrawRectangle(30,200,100,150,dataio.Palette["brickred"])
+				player.Draw()
+			rl.EndMode2D()
+		rl.EndDrawing()
 	}
 }
