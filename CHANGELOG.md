@@ -2,7 +2,9 @@
 
 **a0.1.4build7**
   * add preliminary health bar 
+  
   Description:
+  
     Remove / Add HP to the player by pressing `z` / `x` on the keyboard respectively
 
 **a0.1.2build5**
