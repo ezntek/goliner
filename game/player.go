@@ -20,7 +20,18 @@ func (player *Player) Draw() {
 
 func (player *Player) controls(frames int32, fps int32, floorHeight float32) {
 	var tickTimer int32
+	var stopIncrementingTickTimer bool = false
 	var speed float32 = 0.5
+	if rl.IsKeyPressed(rl.KeyZ) {
+		if player.health >= 1 {
+			player.health--
+		}
+	}
+	if rl.IsKeyPressed(rl.KeyX) {
+		if player.health < 10 { 
+			player.health++
+		}
+	}
 	if rl.IsKeyDown(rl.KeyLeft) {
 		player.Velocity.X -= speed
 	} else if !rl.IsKeyDown(rl.KeyLeft) && player.Velocity.X < 0 {
@@ -39,21 +50,23 @@ func (player *Player) controls(frames int32, fps int32, floorHeight float32) {
 	}
 
 	if rl.IsKeyDown(rl.KeySpace) {
-		if frames % (fps/10) == 0 && tickTimer <= 3 { 
+		if frames % 6 == 0 && !stopIncrementingTickTimer { 
 			tickTimer++
+			fmt.Println("add")
 		}
-		if tickTimer <= 3 {
+		if tickTimer <= 4 && !stopIncrementingTickTimer {
 			player.Velocity.Y -= 1.7
 		}
-		if tickTimer > 4 && player.Rect.Y > floorHeight - 5{
-			player.Velocity.Y = 30
+		if tickTimer > 5 && player.Rect.Y > floorHeight - 5{
+			fmt.Println("stop")
+			player.Velocity.Y = 3
 		}
 	}
 	if rl.IsKeyReleased(rl.KeySpace) {
 		player.Velocity.Y = 0
 		tickTimer = 0
+		stopIncrementingTickTimer = false
 	}
-	fmt.Println(tickTimer)
 }
 
 func (player  *Player) gravity(frames int32, fps int32, floorHeight float32) {
@@ -72,7 +85,7 @@ func (player *Player) Update(fps int32) {
 	}
 	var ticks, frames int32
 	frames++
-	if ticks % (fps/10) == 0 {
+	if ticks % 6 == 0 {
 		ticks++
 	}
 	player.gravity(frames, fps, 1000)
@@ -86,6 +99,6 @@ func NewPlayer(rect rl.Rectangle, color color.RGBA) *Player {
 		Rect: rect,
 		Color: color,
 		Velocity: rl.Vector2{X:0,Y:0},
-		health: 10,
+		health: 5,
 	}
 }

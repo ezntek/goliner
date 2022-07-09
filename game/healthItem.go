@@ -21,8 +21,8 @@ func (t *HealthTile) Draw() {
 
 func NewHealthTile(posx int32, posy int32) *HealthTile {
 	return &HealthTile{
-		BorderTile: rl.NewRectangle(float32(posx), float32(posy), 50,50),
-		HealthItem: rl.NewRectangle(float32(posx)+10, float32(posy)+10, 30,30),
-		IsHidden: false,
+		BorderTile: rl.NewRectangle(float32(posx), float32(posy), 25,25),
+		HealthItem: rl.NewRectangle(float32(posx)+5, float32(posy)+5, 15,15),
+		IsHidden: true,
 	}
 }

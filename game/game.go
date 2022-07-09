@@ -31,6 +31,8 @@ func DrawCheckerboard(size int) {
 }
 
 func Game(conf Config) {
+	healthBarObject := NewHealthBar(conf.ScreenHeight)
+
 	rl.InitWindow(conf.ScreenWidth, conf.ScreenHeight, "wow goliner")
 	rl.SetTargetFPS(conf.FPS)
 
@@ -51,6 +53,7 @@ func Game(conf Config) {
 
 	for !rl.WindowShouldClose() {
 		player.Update(conf.FPS)
+		healthBarObject.Update(int(player.health-1))
 		rl.BeginDrawing()
 			rl.ClearBackground(rl.RayWhite)
 			camera.Target = rl.Vector2{X: player.Rect.X + player.Rect.Width/2, Y: player.Rect.Y + player.Rect.Height/2}
@@ -62,9 +65,7 @@ func Game(conf Config) {
 			rl.DrawText(fmt.Sprintf("X: %0.1f Y: %0.1f", player.Rect.X, player.Rect.Y), 20, 40, 15, rl.Gray)
 			rl.DrawText(fmt.Sprintf("X Velocity: %0.2f Y Velocity: %0.2f", player.Velocity.X, player.Velocity.Y), 20, 55, 15, rl.Gray)
 			rl.DrawText(fmt.Sprintf("HP: %d", player.health), 20, 70, 15, rl.Gray)
-			/*for i := 20; i > 600; i+=60 {
-				NewHealthTile(int32(i), conf.ScreenHeight-60).Draw()
-			}*/
+			healthBarObject.Draw()
 		rl.EndDrawing()
 	}
 }
