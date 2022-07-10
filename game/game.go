@@ -65,7 +65,7 @@ func Game(conf Config) {
 			rl.DrawText(fmt.Sprintf("X: %0.1f Y: %0.1f", player.Rect.X, player.Rect.Y), 20, 40, 15, rl.Gray)
 			rl.DrawText(fmt.Sprintf("X Velocity: %0.2f Y Velocity: %0.2f", player.Velocity.X, player.Velocity.Y), 20, 55, 15, rl.Gray)
 			rl.DrawText(fmt.Sprintf("HP: %d", player.health), 20, 70, 15, rl.Gray)
-			healthBarObject.Draw()
+			healthBarObject.Draw(conf.ScreenHeight)
 		rl.EndDrawing()
 	}
 }

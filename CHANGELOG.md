@@ -1,5 +1,9 @@
 ## changelog
 
+**a0.2.2build9**
+  * improve and polish the health bar
+  * make the max HP of the player 12 instead of 10
+
 **a0.2.1build8**
   * fix jumping issue
 

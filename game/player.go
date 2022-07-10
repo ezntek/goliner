@@ -30,7 +30,7 @@ func (player *Player) controls(frames int32, fps int32, floorHeight float32) {
 		}
 	}
 	if rl.IsKeyPressed(rl.KeyX) {
-		if player.health < 10 { 
+		if player.health < 12 { 
 			player.health++
 		}
 	}
@@ -82,8 +82,8 @@ func (player  *Player) gravity(frames int32, fps int32, floorHeight float32) {
 	}
 }
 func (player *Player) Update(fps int32) {
-	if player.health > 10{
-		player.health = 10
+	if player.health > 12{
+		player.health = 12
 	}
 	
 	player.gravity(player.frames, fps, 1000)
@@ -97,7 +97,7 @@ func NewPlayer(rect rl.Rectangle, color color.RGBA) *Player {
 		Rect: rect,
 		Color: color,
 		Velocity: rl.Vector2{X:0,Y:0},
-		health: 5,
+		health: 12,
 		gravityForce: 1,
 		stopIncrementingCounter: false,
 		counter: 0,
