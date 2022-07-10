@@ -1,6 +1,9 @@
 ## changelog
 
-**a0.1.4build7**
+**a0.2.1build8**
+  * fix jumping issue
+
+**a0.2build7**
   * add preliminary health bar 
   
   Description:

@@ -1,9 +1,9 @@
 package game
 
 import (
+	"fmt"
 	"image/color"
 	"math"
-	"fmt"
 	"github.com/gen2brain/raylib-go/raylib"
 )
 
@@ -12,6 +12,10 @@ type Player struct {
 	Color color.RGBA
 	Velocity rl.Vector2
 	health int32
+	gravityForce float32
+	counter int32
+	stopIncrementingCounter bool
+	frames int32
 }
 
 func (player *Player) Draw() {
@@ -19,8 +23,6 @@ func (player *Player) Draw() {
 }
 
 func (player *Player) controls(frames int32, fps int32, floorHeight float32) {
-	var tickTimer int32
-	var stopIncrementingTickTimer bool = false
 	var speed float32 = 0.5
 	if rl.IsKeyPressed(rl.KeyZ) {
 		if player.health >= 1 {
@@ -50,22 +52,22 @@ func (player *Player) controls(frames int32, fps int32, floorHeight float32) {
 	}
 
 	if rl.IsKeyDown(rl.KeySpace) {
-		if frames % 6 == 0 && !stopIncrementingTickTimer { 
-			tickTimer++
-			fmt.Println("add")
-		}
-		if tickTimer <= 4 && !stopIncrementingTickTimer {
+		player.counter++
+		fmt.Println(player.counter)
+		if player.counter <= 20 {
 			player.Velocity.Y -= 1.7
 		}
-		if tickTimer > 5 && player.Rect.Y > floorHeight - 5{
-			fmt.Println("stop")
-			player.Velocity.Y = 3
-		}
-	}
+		if player.counter >= 20 && player.Rect.Y > floorHeight - 5{
+			player.gravityForce = 1.5
+			player.stopIncrementingCounter = true
+		}	
+	}	
 	if rl.IsKeyReleased(rl.KeySpace) {
-		player.Velocity.Y = 0
-		tickTimer = 0
-		stopIncrementingTickTimer = false
+		player.Velocity.Y = 3.5
+		//tickTimer = 0
+		player.gravityForce = 1
+		player.counter = 0
+		player.stopIncrementingCounter = false
 	}
 }
 
@@ -83,13 +85,9 @@ func (player *Player) Update(fps int32) {
 	if player.health > 10{
 		player.health = 10
 	}
-	var ticks, frames int32
-	frames++
-	if ticks % 6 == 0 {
-		ticks++
-	}
-	player.gravity(frames, fps, 1000)
-	player.controls(frames, fps, 1000)
+	
+	player.gravity(player.frames, fps, 1000)
+	player.controls(player.frames, fps, 1000)
 	player.Rect.X += player.Velocity.X
 	player.Rect.Y += player.Velocity.Y
 }
@@ -100,5 +98,8 @@ func NewPlayer(rect rl.Rectangle, color color.RGBA) *Player {
 		Color: color,
 		Velocity: rl.Vector2{X:0,Y:0},
 		health: 5,
+		gravityForce: 1,
+		stopIncrementingCounter: false,
+		counter: 0,
 	}
 }
